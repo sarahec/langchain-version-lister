@@ -6,7 +6,7 @@
       url = "file+file:///dev/null";
       flake = false;
     };
-    nixpkgs.url = "github:cachix/devenv-nixpkgs/rolling";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     devenv.url = "github:cachix/devenv";
     nix2container.url = "github:nlewo/nix2container";
     nix2container.inputs.nixpkgs.follows = "nixpkgs";
@@ -30,9 +30,6 @@
         # module parameters provide easy access to attributes of the same
         # system.
 
-        # Equivalent to  inputs'.nixpkgs.legacyPackages.hello;
-        packages.default = pkgs.hello;
-
         devenv.shells.default = {
           devenv.root =
             let
@@ -40,7 +37,7 @@
             in
             pkgs.lib.mkIf (devenvRootFileContent != "") devenvRootFileContent;
 
-          name = "my-project";
+          name = "langchain-version-lister";
 
           imports = [
             # This is just like the imports in devenv.nix.
@@ -48,8 +45,15 @@
             # ./devenv-foo.nix
           ];
 
+          languages.nix.enable = true;
+          languages.python = {
+            enable = true;
+            venv.enable = true;
+            # packages = [ pkgs.python3 ];
+          };
+
           # https://devenv.sh/reference/options/
-          packages = [ config.packages.default ];
+          packages = [ pkgs.hello ];
 
           enterShell = ''
             hello
