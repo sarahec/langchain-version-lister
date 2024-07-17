@@ -48,18 +48,21 @@
           languages.nix.enable = true;
           languages.python = {
             enable = true;
-            venv.enable = true;
-            # packages = [ pkgs.python3 ];
+            venv = {
+              enable = true;
+              requirements = ''
+                requests
+              '';
+            };
           };
 
           # https://devenv.sh/reference/options/
           packages = [ pkgs.hello ];
 
           enterShell = ''
-            hello
           '';
 
-          processes.hello.exec = "hello";
+          # processes.hello.exec = "hello";
         };
 
       };
